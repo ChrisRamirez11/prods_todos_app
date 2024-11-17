@@ -1,12 +1,12 @@
 import 'package:http/http.dart' as http;
 import 'package:prods_todos_app/utils/consts.dart';
 
-class ProductsServsMock {
+class ProdsJsonAPI {
   final url = Uri.parse('${Consts.mockUrl}products');
   final Map<String, String> headers = {'content-type': 'application/json'};
 
-  //simple implementation
-  getTenProducts() async {
+  //simple implementation, getting only 10 products
+  fetchProducts() async {
     url.replace(queryParameters: {'limit': '10'});
 
     try {

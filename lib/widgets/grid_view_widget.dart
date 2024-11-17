@@ -56,7 +56,7 @@ class _GridViewWidgetState extends State<GridViewWidget> {
       height: double.maxFinite,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
-        color: secondary.withAlpha(100),
+        color: second2,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

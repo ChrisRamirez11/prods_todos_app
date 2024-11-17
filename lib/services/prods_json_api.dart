@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:http/http.dart' as http;
+import 'package:prods_todos_app/models/pending_product.dart';
 import 'package:prods_todos_app/utils/consts.dart';
 
 class ProdsJsonAPI {
@@ -10,9 +9,21 @@ class ProdsJsonAPI {
   //simple implementation, getting only 10 products
   Future<String> fetchProducts() async {
     final newurl = url.replace(queryParameters: {'limit': '10', 'page': '1'},);
-  log(newurl.toString());
     try {
       final res = await http.get(newurl, headers: headers);
+      if (res.statusCode >= 200 && res.statusCode <= 299) {
+        return res.body;
+      } else {
+        throw Exception('${res.statusCode} - ${res.reasonPhrase}');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+  Future<String> deleteProduct(PendingProduct pendingProduct) async {
+    final newurl = Uri.parse('$url/${pendingProduct.id}');
+    try {
+      final res = await http.delete(newurl, headers: headers);
       if (res.statusCode >= 200 && res.statusCode <= 299) {
         return res.body;
       } else {

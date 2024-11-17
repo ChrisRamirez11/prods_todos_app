@@ -64,6 +64,23 @@ class CheckedProductsSqlite {
     return list;
   }
 
+
+  //Get Pagination checked Product
+  Future<List<CheckedProduct>> getPaginatedProduct(int offset) async {
+    final db = await database;
+
+    final res = await db.query(_table, limit: 7, offset: offset);
+    final List<CheckedProduct> list = res.isNotEmpty
+        ? res
+            .map(
+              (e) => CheckedProduct.fromMap(e),
+            )
+            .toList()
+        : [];
+    return list;
+  }
+
+
   //Get checked product by State
   Future<List<CheckedProduct>> getProductsByState(String state) async {
     final db = await database;
@@ -87,6 +104,7 @@ class CheckedProductsSqlite {
     final res = await db.query(_table, where: 'id = ?', whereArgs: [id]);
     return res.isNotEmpty ? CheckedProduct.fromMap(res.first) : null;
   }
+
 
   //Update checked Product
   Future<int> updateProduct(CheckedProduct checkedProduct) async {

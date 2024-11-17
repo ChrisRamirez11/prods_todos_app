@@ -5,15 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "prods_todos_app",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
             "name": "dev",
             "request": "launch",
             "type": "dart",
-            "args": ["--dart-define-from-file=env/dev.json"]
+            "args": [
+                "--dart-define-from-file=env/dev.json"
+            ]
+        },
+        {
+            "name": "prods_todos_app",
+            "request": "launch",
+            "type": "dart"
         },
         {
             "name": "prods_todos_app (profile mode)",

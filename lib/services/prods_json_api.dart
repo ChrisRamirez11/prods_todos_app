@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 import 'package:prods_todos_app/utils/consts.dart';
 
@@ -6,11 +8,11 @@ class ProdsJsonAPI {
   final Map<String, String> headers = {'content-type': 'application/json'};
 
   //simple implementation, getting only 10 products
-  fetchProducts() async {
-    url.replace(queryParameters: {'limit': '10'});
-
+  Future<String> fetchProducts() async {
+    final newurl = url.replace(queryParameters: {'limit': '10', 'page': '1'},);
+  log(newurl.toString());
     try {
-      final res = await http.get(url, headers: headers);
+      final res = await http.get(newurl, headers: headers);
       if (res.statusCode >= 200 && res.statusCode <= 299) {
         return res.body;
       } else {

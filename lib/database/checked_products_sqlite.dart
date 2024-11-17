@@ -81,22 +81,6 @@ class CheckedProductsSqlite {
   }
 
 
-  //Get checked product by State
-  Future<List<CheckedProduct>> getProductsByState(String state) async {
-    final db = await database;
-
-    final res = await db.query(_table, where: 'state = ?', whereArgs: [state]);
-
-    final List<CheckedProduct> list = res.isNotEmpty
-        ? res
-            .map(
-              (e) => CheckedProduct.fromMap(e),
-            )
-            .toList()
-        : [];
-    return list;
-  }
-
   //Get Single checked Product
   Future<CheckedProduct?> getSingleProduct(int id) async {
     final db = await database;

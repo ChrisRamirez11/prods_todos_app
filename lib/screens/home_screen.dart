@@ -10,6 +10,12 @@ class HomeScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          actions: [
+            IconButton(onPressed: () {
+              
+            }, icon: Icon(Icons.manage_history))
+          ],
+          centerTitle: true,
           title: Text(
             'Inicio',
             style: Theme.of(context).textTheme.bodyLarge,

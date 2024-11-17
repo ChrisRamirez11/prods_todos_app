@@ -7,8 +7,12 @@ import 'package:sqflite/sqflite.dart';
 
 
 class CheckedProductsSqlite {
+  static final CheckedProductsSqlite _db = CheckedProductsSqlite._();
   Database? _database;
-  CheckedProductsSqlite db = CheckedProductsSqlite._();
+
+  factory CheckedProductsSqlite(){
+    return _db;
+  }
 
   CheckedProductsSqlite._();
 
@@ -17,7 +21,7 @@ class CheckedProductsSqlite {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = _initDB();
+    _database = await _initDB();
     return _database!;
   }
 
@@ -32,8 +36,8 @@ class CheckedProductsSqlite {
       onCreate: (db, version) async {
         return await db.execute('CREATE TABLE $_table ('
             'id INTEGER PRIMARY KEY,'
-            'name TEXT'
-            'description TEXT'
+            'name TEXT,'
+            'description TEXT,'
             'state TEXT'
             ')');
       },
@@ -43,7 +47,7 @@ class CheckedProductsSqlite {
   //Adding checked product
   addProduct(CheckedProduct checkedProduct) async {
     final db = await database;
-
+    
     final res = await db.insert(_table, checkedProduct.toMap());
     return res;
   }

@@ -20,6 +20,8 @@ class ProdsJsonAPI {
       rethrow;
     }
   }
+
+  
   Future<String> deleteProduct(PendingProduct pendingProduct) async {
     final newurl = Uri.parse('$url/${pendingProduct.id}');
     try {

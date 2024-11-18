@@ -110,10 +110,9 @@ _createGridContainer(BuildContext context, int index, WidgetRef ref) {
                             child: const Card(
                               color: Colors.red,
                               child: ListTile(
-                                title: Center(child: Text('Eliminado')),
+                                title: Center(child: Text('Cancelado')),
                               ),
                             ));
-                        //TODO delete from provider
                       },
                     );
                     ref.watch(pendingProductProvider).deleteProduct(product);
@@ -129,7 +128,30 @@ _createGridContainer(BuildContext context, int index, WidgetRef ref) {
                   icon: const Icon(Icons.cancel)),
               const Expanded(child: SizedBox()),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    AnimatedGrid.of(context).removeItem(
+                      duration: const Duration(milliseconds: 600),
+                      index,
+                      (context, animation) {
+                        return FadeTransition(opacity: animation,
+                            child: const Card(
+                              color: Colors.red,
+                              child: ListTile(
+                                title: Center(child: Text('Aprobado')),
+                              ),
+                            ));
+                      },
+                    );
+                    ref.watch(pendingProductProvider).deleteProduct(product);
+                    CheckedProduct checkedProduct = CheckedProduct(
+                        name: product.name,
+                        description: product.description,
+                        id: product.id,
+                        state: Status.accepted);
+                    ref
+                        .watch(checkedProductProvider)
+                        .addProduct(checkedProduct);
+                  },
                   icon: const Icon(Icons.check_circle_outline))
             ],
           ),

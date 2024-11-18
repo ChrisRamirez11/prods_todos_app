@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prods_todos_app/screens/rejected.dart';
+import 'package:prods_todos_app/screens/checked_products.dart';
 import 'package:prods_todos_app/utils/theme.dart';
 
 class CheckedProductScreen extends StatefulWidget {
@@ -23,7 +23,7 @@ class _CheckedProductScreenState extends State<CheckedProductScreen> {
           foregroundColor: secondary,
           backgroundColor: primary,
         ),
-        body: const RejectedProduct(),
+        body: const CheckedProducts(),
       ),
     );
   }

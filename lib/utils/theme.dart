@@ -6,9 +6,9 @@ const Color tertiary = Colors.black;
 const Color white = Color(0xFFF9F6ED);
 
 const Color second2 = Color.fromARGB(255, 58, 54, 43);
-const Color greenCustom = Color(0xFF57B35F);
+ Color greenCustom = const Color(0xFF57B35F).withOpacity(0.6);
 
-Color errorColor = Colors.red.shade300;
+Color errorColor = Colors.red.withOpacity(0.4);
 
 const double largeSize = 20;
 const double mediumSize = 16;

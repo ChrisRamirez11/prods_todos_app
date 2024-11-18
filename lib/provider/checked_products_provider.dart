@@ -30,9 +30,15 @@ class ProductsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  addProduct(CheckedProduct checkedProduct) {
+  addProduct(CheckedProduct checkedProduct) async {
+    await _checkedProductsSqlite.addProduct(checkedProduct);
     _checkedProduct.add(checkedProduct);
-    _checkedProductsSqlite.addProduct(checkedProduct);
+    notifyListeners();
+  }
+
+  deleteProduct(CheckedProduct checkedProduct) async {
+    await _checkedProductsSqlite.deleteProduct(checkedProduct.id);
+    _checkedProduct.removeWhere((element) => element.id == checkedProduct.id,);
     notifyListeners();
   }
 }

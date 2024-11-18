@@ -22,56 +22,77 @@ class _RejectedProductState extends ConsumerState<RejectedProduct> {
       body: Container(
         child: reference.isLoading
             ? customLoaderWidget()
-            : Container(
-                color: second2,
-                child: ListView.builder(
-                  itemCount: reference.checkedProduct.length,
-                  itemBuilder: (context, index) {
-                    final CheckedProduct checkedProduct = reference.checkedProduct[index];
-                    return getListTile(context, checkedProduct);
-                  },
-                ),
+            : AnimatedList(
+                initialItemCount: reference.checkedProduct.length,
+                itemBuilder: (context, index, animation) {
+                  final CheckedProduct checkedProduct =
+                      reference.checkedProduct[index];
+                  return getListTile(context, checkedProduct, index);
+                },
               ),
       ),
     );
   }
 }
 
-Widget getListTile(BuildContext context, CheckedProduct checkedProduct) {
-  return Row(
-    children: [
-      Expanded(
-        flex: 5,
-        child: Card(
-          child: SizedBox(
-            height: 70,
-            child: InkWell(
-              onTap: () {
-              },
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.receipt_long),
-                        Text(
-                          'ID: #${checkedProduct.id}',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ],
+//TODO AnimatedList.of(context).removeItem
+Widget getListTile(
+    BuildContext context, CheckedProduct checkedProduct, int index) {
+  return Dismissible(
+    key: UniqueKey(),
+    onDismissed: (direction) {
+      //TODO delete from provider
+    },
+    child: Row(
+      children: [
+        Expanded(
+          flex: 5,
+          child: Card(
+            color: second2,
+            child: SizedBox(
+              height: 70,
+              child: InkWell(
+                onTap: () {
+                  AnimatedList.of(context).removeItem(
+                      duration: const Duration(milliseconds: 500),
+                      index, (context, animation) {
+                    return SlideTransition(
+                        position: animation.drive(Tween(
+                            begin: const Offset(1, 0),
+                            end: const Offset(0, 0))),
+                        child: const Card(
+                          color: Colors.red,
+                          child: ListTile(
+                            title: Center(child: Text('Eliminado')),
+                          ),
+                        ));
+                        //TODO delete from provider
+                  });
+                },
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.receipt_long),
+                          Text(
+                            'ID: #${checkedProduct.id}',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 30, child: VerticalDivider()),
-                  
-                ],
+                    const SizedBox(height: 30, child: VerticalDivider()),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-    ],
+      ],
+    ),
   );
 }

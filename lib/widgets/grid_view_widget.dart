@@ -21,12 +21,12 @@ class _GridViewWidgetState extends ConsumerState<GridViewWidget> {
     return Container(
         child: ref.watch(pendingProductProvider).isLoading
             ? customLoaderWidget()
-            : GridView.builder(
-                itemCount:
+            : AnimatedGrid(
+                initialItemCount:
                     ref.watch(pendingProductProvider).pendingProduct.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     childAspectRatio: 0.9, crossAxisCount: 2),
-                itemBuilder: (context, index) {
+                itemBuilder: (context, index, animation) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Card(
@@ -43,7 +43,7 @@ class _GridViewWidgetState extends ConsumerState<GridViewWidget> {
 }
 
 _createGridContainer(BuildContext context, int index, WidgetRef ref) {
-  PendingProduct product =
+  final PendingProduct product =
       ref.watch(pendingProductProvider).pendingProduct[index];
 
   return Container(
@@ -102,6 +102,20 @@ _createGridContainer(BuildContext context, int index, WidgetRef ref) {
             children: [
               IconButton(
                   onPressed: () {
+                    AnimatedGrid.of(context).removeItem(
+                      duration: const Duration(milliseconds: 600),
+                      index,
+                      (context, animation) {
+                        return FadeTransition(opacity: animation,
+                            child: const Card(
+                              color: Colors.red,
+                              child: ListTile(
+                                title: Center(child: Text('Eliminado')),
+                              ),
+                            ));
+                        //TODO delete from provider
+                      },
+                    );
                     ref.watch(pendingProductProvider).deleteProduct(product);
                     CheckedProduct checkedProduct = CheckedProduct(
                         name: product.name,

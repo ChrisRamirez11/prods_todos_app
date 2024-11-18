@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prods_todos_app/models/checked_product.dart';
-import 'package:prods_todos_app/models/pending_product.dart';
+import 'package:prods_todos_app/models/product.dart';
 import 'package:prods_todos_app/provider/checked_products_provider.dart';
 import 'package:prods_todos_app/provider/pending_products_provider.dart';
 import 'package:prods_todos_app/utils/status.dart';
@@ -43,7 +43,7 @@ class _GridViewWidgetState extends ConsumerState<GridViewWidget> {
 }
 
 _createGridContainer(BuildContext context, int index, WidgetRef ref) {
-  final PendingProduct product =
+  final Product product =
       ref.watch(pendingProductProvider).pendingProduct[index];
 
   return Container(

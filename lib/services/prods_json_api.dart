@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http;
-import 'package:prods_todos_app/models/pending_product.dart';
+import 'package:prods_todos_app/models/product.dart';
 import 'package:prods_todos_app/utils/consts.dart';
 
 class ProdsJsonAPI {
@@ -22,7 +22,7 @@ class ProdsJsonAPI {
   }
 
   
-  Future<String> deleteProduct(PendingProduct pendingProduct) async {
+  Future<String> deleteProduct(Product pendingProduct) async {
     final newurl = Uri.parse('$url/${pendingProduct.id}');
     try {
       final res = await http.delete(newurl, headers: headers);

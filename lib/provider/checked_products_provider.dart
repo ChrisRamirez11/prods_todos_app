@@ -3,22 +3,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prods_todos_app/database/checked_products_sqlite.dart';
 import 'package:prods_todos_app/models/checked_product.dart';
 
-final checkedProductProvider = ChangeNotifierProvider<CheckedProductsProvider>(
+final checkedProductProvider = ChangeNotifierProvider<ProductsProvider>(
   (ref) {
-    return CheckedProductsProvider();
+    return ProductsProvider();
   },
 );
 
-class CheckedProductsProvider extends ChangeNotifier {
+class ProductsProvider extends ChangeNotifier {
   final List<CheckedProduct> _checkedProduct = [];
-  final CheckedProductsSqlite _checkedProductsSqlite = CheckedProductsSqlite();
+  final ProductsSqlite _checkedProductsSqlite = ProductsSqlite();
   
-  int _count = 0;
+  int _count = 1;
   bool isLoading = true;
 
   List<CheckedProduct> get checkedProduct => _checkedProduct;
 
-  CheckedProductsProvider() {
+  ProductsProvider() {
     _loadList();
   }
 

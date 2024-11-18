@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prods_todos_app/models/pending_product.dart';
+import 'package:prods_todos_app/models/product.dart';
 import 'package:prods_todos_app/services/prods_adapter.dart';
 import 'package:prods_todos_app/services/prods_json_api.dart';
 
@@ -13,11 +13,11 @@ final pendingProductProvider = ChangeNotifierProvider<PendingProductsProvider>(
 );
 
 class PendingProductsProvider extends ChangeNotifier {
-  final List<PendingProduct> _pendingProduct = [];
+  final List<Product> _pendingProduct = [];
   ProdsJsonAPI prodsJsonAPI = ProdsJsonAPI();
   bool isLoading = true;
 
-  List<PendingProduct> get pendingProduct => _pendingProduct;
+  List<Product> get pendingProduct => _pendingProduct;
 
   PendingProductsProvider() {
     _loadList();
@@ -31,7 +31,7 @@ class PendingProductsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteProduct(PendingProduct pp) async {
+  Future<void> deleteProduct(Product pp) async {
     log('here');
     await prodsJsonAPI.deleteProduct(pp);
     _pendingProduct.removeWhere(

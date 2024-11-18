@@ -6,15 +6,15 @@ import 'package:prods_todos_app/models/checked_product.dart';
 import 'package:sqflite/sqflite.dart';
 
 
-class CheckedProductsSqlite {
-  static final CheckedProductsSqlite _db = CheckedProductsSqlite._();
+class ProductsSqlite {
+  static final ProductsSqlite _db = ProductsSqlite._();
   Database? _database;
 
-  factory CheckedProductsSqlite(){
+  factory ProductsSqlite(){
     return _db;
   }
 
-  CheckedProductsSqlite._();
+  ProductsSqlite._();
 
   final String _table = 'Prods';
 
@@ -69,7 +69,7 @@ class CheckedProductsSqlite {
   }
 
 
-  //Get Pagination checked Product
+  //Get Pagination checked CheckedProduct
   Future<List<CheckedProduct>> getPaginatedProduct(int offset) async {
     final db = await database;
 
@@ -85,7 +85,7 @@ class CheckedProductsSqlite {
   }
 
 
-  //Get Single checked Product
+  //Get Single checked CheckedProduct
   Future<CheckedProduct?> getSingleProduct(int id) async {
     final db = await database;
 
@@ -94,7 +94,7 @@ class CheckedProductsSqlite {
   }
 
 
-  //Update checked Product
+  //Update checked CheckedProduct
   Future<int> updateProduct(CheckedProduct checkedProduct) async {
     final db = await database;
 

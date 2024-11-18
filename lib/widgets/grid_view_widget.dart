@@ -40,123 +40,137 @@ class _GridViewWidgetState extends ConsumerState<GridViewWidget> {
                 },
               ));
   }
-}
 
-_createGridContainer(BuildContext context, int index, WidgetRef ref) {
-  final Product product =
-      ref.watch(pendingProductProvider).pendingProduct[index];
+  _createGridContainer(BuildContext context, int index, WidgetRef ref) {
+    final Product product =
+        ref.watch(pendingProductProvider).pendingProduct[index];
 
-  return Container(
-    height: double.maxFinite,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(8.0),
-      color: second2,
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          flex: 8,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 5),
-            child: Center(
-              child: AspectRatio(
-                aspectRatio: 4 / 3,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Image.asset(
-                      'assets/images/no-image.png',
-                      fit: BoxFit.cover,
+    return Container(
+      height: double.maxFinite,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: second2,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 8,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 5),
+              child: Center(
+                child: AspectRatio(
+                  aspectRatio: 4 / 3,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.asset(
+                        'assets/images/no-image.png',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Text(
-              product.name,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodyMedium,
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Text(
+                product.name,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ),
           ),
-        ),
-        const Center(
-          child: Divider(
-            indent: 10,
-            endIndent: 10,
-            thickness: 1,
+          const Center(
+            child: Divider(
+              indent: 10,
+              endIndent: 10,
+              thickness: 1,
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Row(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    AnimatedGrid.of(context).removeItem(
-                      duration: const Duration(milliseconds: 600),
-                      index,
-                      (context, animation) {
-                        return FadeTransition(opacity: animation,
-                            child: const Card(
-                              color: Colors.red,
-                              child: ListTile(
-                                title: Center(child: Text('Cancelado')),
-                              ),
-                            ));
-                      },
-                    );
-                    ref.watch(pendingProductProvider).deleteProduct(product);
-                    CheckedProduct checkedProduct = CheckedProduct(
-                        name: product.name,
-                        description: product.description,
-                        id: product.id,
-                        state: Status.canceled);
-                    ref
-                        .watch(checkedProductProvider)
-                        .addProduct(checkedProduct);
-                  },
-                  icon: const Icon(Icons.cancel)),
-              const Expanded(child: SizedBox()),
-              IconButton(
-                  onPressed: () {
-                    AnimatedGrid.of(context).removeItem(
-                      duration: const Duration(milliseconds: 600),
-                      index,
-                      (context, animation) {
-                        return FadeTransition(opacity: animation,
-                            child: const Card(
-                              color: Colors.red,
-                              child: ListTile(
-                                title: Center(child: Text('Aprobado')),
-                              ),
-                            ));
-                      },
-                    );
-                    ref.watch(pendingProductProvider).deleteProduct(product);
-                    CheckedProduct checkedProduct = CheckedProduct(
-                        name: product.name,
-                        description: product.description,
-                        id: product.id,
-                        state: Status.accepted);
-                    ref
-                        .watch(checkedProductProvider)
-                        .addProduct(checkedProduct);
-                  },
-                  icon: const Icon(Icons.check_circle_outline))
-            ],
-          ),
-        )
-      ],
-    ),
-  );
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              children: [
+                IconButton(
+                    onPressed: () async {
+                      if (mounted) {
+                        await ref
+                            .watch(pendingProductProvider)
+                            .deleteProduct(product);
+                        // ignore: use_build_context_synchronously
+                        AnimatedGrid.of(context).removeItem(
+                          duration: const Duration(milliseconds: 600),
+                          index,
+                          (context, animation) {
+                            return FadeTransition(
+                                opacity: animation,
+                                child: Card(
+                                  color: errorColor,
+                                  child: const ListTile(
+                                    title: Center(child: Text('Cancelado')),
+                                  ),
+                                ));
+                          },
+                        );
+
+                        CheckedProduct checkedProduct = CheckedProduct(
+                            name: product.name,
+                            description: product.description,
+                            id: product.id,
+                            state: Status.canceled);
+                        ref
+                            .watch(checkedProductProvider)
+                            .addProduct(checkedProduct);
+                      }
+                    },
+                    icon: const Icon(Icons.cancel)),
+                const Expanded(child: SizedBox()),
+                IconButton(
+                    onPressed: () async {
+                      if (mounted) {
+                        await ref
+                            .watch(pendingProductProvider)
+                            .deleteProduct(product);
+                        // ignore: use_build_context_synchronously
+                        AnimatedGrid.of(context).removeItem(
+                          duration: const Duration(milliseconds: 600),
+                          index,
+                          (context, animation) {
+                            return FadeTransition(
+                                opacity: animation,
+                                child: Card(
+                                  color: greenCustom,
+                                  child: const ListTile(
+                                    title: Center(child: Text('Aprobado')),
+                                  ),
+                                ));
+                          },
+                        );
+
+                        CheckedProduct checkedProduct = CheckedProduct(
+                            name: product.name,
+                            description: product.description,
+                            id: product.id,
+                            state: Status.accepted);
+                        ref
+                            .watch(checkedProductProvider)
+                            .addProduct(checkedProduct);
+                      }
+                    },
+                    icon: const Icon(Icons.check_circle_outline))
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }

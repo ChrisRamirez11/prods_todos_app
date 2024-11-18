@@ -15,14 +15,20 @@ final pendingProductProvider = ChangeNotifierProvider<PendingProductsProvider>(
 class PendingProductsProvider extends ChangeNotifier {
   final List<Product> _pendingProduct = [];
   ProdsJsonAPI prodsJsonAPI = ProdsJsonAPI();
+  bool isLoading = true;
 
   List<Product> get pendingProduct => _pendingProduct;
 
-  Future<List<Product>> loadList() async {
+  PendingProductsProvider() {
+    _loadList();
+  }
+
+  Future<void> _loadList() async {
     log('message');
     ProdsAdapter prodsAdapter = ProdsAdapter(prodsJsonAPI: prodsJsonAPI);
     _pendingProduct.addAll(await prodsAdapter.getProductsFromJson());
-    return pendingProduct;
+    isLoading = false;
+    notifyListeners();
   }
 
   Future<void> deleteProduct(Product pp) async {
@@ -31,6 +37,7 @@ class PendingProductsProvider extends ChangeNotifier {
     _pendingProduct.removeWhere(
       (element) => element.id == pp.id,
     );
+    isLoading = false;
     notifyListeners();
   }
 }

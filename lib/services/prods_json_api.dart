@@ -11,7 +11,7 @@ class ProdsJsonAPI {
     final newurl = url.replace(queryParameters: {'limit': '10', 'page': '1'},);
     try {
       final res = await http.get(newurl, headers: headers);
-      if (res.statusCode >= 200 && res.statusCode <= 299) {
+      if (res.statusCode >= 200 && res.statusCode < 300) {
         return res.body;
       } else {
         throw Exception('${res.statusCode} - ${res.reasonPhrase}');

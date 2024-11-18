@@ -6,7 +6,6 @@ import 'package:prods_todos_app/provider/checked_products_provider.dart';
 import 'package:prods_todos_app/provider/pending_products_provider.dart';
 import 'package:prods_todos_app/utils/status.dart';
 import 'package:prods_todos_app/utils/theme.dart';
-import 'package:prods_todos_app/widgets/custom_error_widget.dart';
 import 'package:prods_todos_app/widgets/custom_loader_widget.dart';
 import 'package:prods_todos_app/widgets/products_simple_dialog.dart';
 
@@ -20,38 +19,35 @@ class GridViewWidget extends ConsumerStatefulWidget {
 class _GridViewWidgetState extends ConsumerState<GridViewWidget> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: ref.watch(pendingProductProvider).loadList(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return customErrorWidget();
-        } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return customLoaderWidget();
-        } else {
-          return AnimatedGrid(
-            initialItemCount:
-                ref.watch(pendingProductProvider).pendingProduct.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 0.9, crossAxisCount: 2),
-            itemBuilder: (context, index, animation) {
-              final Product product =
-                  ref.watch(pendingProductProvider).pendingProduct[index];
+    return ref.watch(pendingProductProvider).isLoading
+        ? customLoaderWidget()
+        : _getAnimatedList();
+  }
 
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Card(
-                  elevation: 10,
-                  child: InkWell(
-                    onTap: () {
-                      showDialog(context: context, builder: (context) => productSimpleDialog(context, product),);
-                    },
-                    child: _createGridContainer(context, index, ref, product),
-                  ),
-                ),
-              );
-            },
-          );
-        }
+  Widget _getAnimatedList() {
+    return AnimatedGrid(
+      initialItemCount: ref.watch(pendingProductProvider).pendingProduct.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          childAspectRatio: 0.9, crossAxisCount: 2),
+      itemBuilder: (context, index, animation) {
+        final Product product =
+            ref.watch(pendingProductProvider).pendingProduct[index];
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Card(
+            elevation: 10,
+            child: InkWell(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => productSimpleDialog(context, product),
+                );
+              },
+              child: _createGridContainer(context, index, ref, product),
+            ),
+          ),
+        );
       },
     );
   }
@@ -148,9 +144,6 @@ class _GridViewWidgetState extends ConsumerState<GridViewWidget> {
                 IconButton(
                     onPressed: () async {
                       if (mounted) {
-                        await ref
-                            .watch(pendingProductProvider)
-                            .deleteProduct(product);
                         // ignore: use_build_context_synchronously
                         AnimatedGrid.of(context).removeItem(
                           duration: const Duration(milliseconds: 600),

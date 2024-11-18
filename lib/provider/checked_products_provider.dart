@@ -16,7 +16,7 @@ class ProductsProvider extends ChangeNotifier {
   int _count = 1;
   bool isLoading = true;
 
-  List<CheckedProduct> get checkedProduct => _checkedProducts;
+  List<CheckedProduct> get checkedProducts => _checkedProducts;
 
   ProductsProvider() {
     _loadList();
@@ -40,7 +40,7 @@ class ProductsProvider extends ChangeNotifier {
         .addAll(await _checkedProductsSqlite.getPaginatedProduct(_count));
     _count += 7;
     notifyListeners();
-    return checkedProduct;
+    return checkedProducts;
   }
 
   deleteProduct(CheckedProduct checkedProduct) async {

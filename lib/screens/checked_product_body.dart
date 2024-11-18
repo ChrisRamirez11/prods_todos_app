@@ -52,10 +52,10 @@ class _RejectedProductState extends ConsumerState<CheckedProducts> {
               children: [
                 ListView.builder(
                   controller: _scrollController,
-                  itemCount: reference.checkedProduct.length,
+                  itemCount: reference.checkedProducts.length,
                   itemBuilder: (context, index) {
                     final CheckedProduct checkedProduct =
-                        reference.checkedProduct[index];
+                        reference.checkedProducts[index];
                     return getListTile(context, checkedProduct, index, ref);
                   },
                 ),
@@ -103,8 +103,9 @@ class _RejectedProductState extends ConsumerState<CheckedProducts> {
   }
 
   Widget _getFetchMore() {
-    if (_scrollController.positions.isEmpty) {
-      return Column(
+    if (_scrollController.positions.length <= 1) {
+      return ref.read(checkedProductProvider).checkedProducts.length <= 11 ?
+      Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -117,7 +118,7 @@ class _RejectedProductState extends ConsumerState<CheckedProducts> {
           ),
           const SizedBox(height: 20),
         ],
-      );
+      ): Container();
     }
     return Container();
   }

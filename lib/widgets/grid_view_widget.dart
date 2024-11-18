@@ -8,6 +8,7 @@ import 'package:prods_todos_app/utils/status.dart';
 import 'package:prods_todos_app/utils/theme.dart';
 import 'package:prods_todos_app/widgets/custom_error_widget.dart';
 import 'package:prods_todos_app/widgets/custom_loader_widget.dart';
+import 'package:prods_todos_app/widgets/products_simple_dialog.dart';
 
 class GridViewWidget extends ConsumerStatefulWidget {
   const GridViewWidget({super.key});
@@ -33,13 +34,18 @@ class _GridViewWidgetState extends ConsumerState<GridViewWidget> {
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: 0.9, crossAxisCount: 2),
             itemBuilder: (context, index, animation) {
+              final Product product =
+                  ref.watch(pendingProductProvider).pendingProduct[index];
+
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Card(
                   elevation: 10,
                   child: InkWell(
-                    onTap: () {},
-                    child: _createGridContainer(context, index, ref),
+                    onTap: () {
+                      showDialog(context: context, builder: (context) => productSimpleDialog(context, product),);
+                    },
+                    child: _createGridContainer(context, index, ref, product),
                   ),
                 ),
               );
@@ -50,10 +56,8 @@ class _GridViewWidgetState extends ConsumerState<GridViewWidget> {
     );
   }
 
-  _createGridContainer(BuildContext context, int index, WidgetRef ref) {
-    final Product product =
-        ref.watch(pendingProductProvider).pendingProduct[index];
-
+  _createGridContainer(
+      BuildContext context, int index, WidgetRef ref, Product product) {
     return Container(
       height: double.maxFinite,
       decoration: BoxDecoration(

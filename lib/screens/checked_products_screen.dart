@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prods_todos_app/screens/checked_products.dart';
+import 'package:prods_todos_app/screens/checked_product_body.dart';
 import 'package:prods_todos_app/utils/theme.dart';
 
 class CheckedProductScreen extends StatefulWidget {

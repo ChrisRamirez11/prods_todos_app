@@ -26,7 +26,7 @@ class ProdsJsonAPI {
     final newurl = Uri.parse('$url/${pendingProduct.id}');
     try {
       final res = await http.delete(newurl, headers: headers);
-      if (res.statusCode >= 200 && res.statusCode <= 299) {
+      if (res.statusCode >= 200 && res.statusCode < 300) {
         return res.body;
       } else {
         throw Exception('${res.statusCode} - ${res.reasonPhrase}');

@@ -6,6 +6,7 @@ import 'package:prods_todos_app/provider/checked_products_provider.dart';
 import 'package:prods_todos_app/provider/pending_products_provider.dart';
 import 'package:prods_todos_app/utils/status.dart';
 import 'package:prods_todos_app/utils/theme.dart';
+import 'package:prods_todos_app/widgets/custom_error_widget.dart';
 import 'package:prods_todos_app/widgets/custom_loader_widget.dart';
 
 class GridViewWidget extends ConsumerStatefulWidget {
@@ -18,27 +19,35 @@ class GridViewWidget extends ConsumerStatefulWidget {
 class _GridViewWidgetState extends ConsumerState<GridViewWidget> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: ref.watch(pendingProductProvider).isLoading
-            ? customLoaderWidget()
-            : AnimatedGrid(
-                initialItemCount:
-                    ref.watch(pendingProductProvider).pendingProduct.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 0.9, crossAxisCount: 2),
-                itemBuilder: (context, index, animation) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Card(
-                      elevation: 10,
-                      child: InkWell(
-                        onTap: () {},
-                        child: _createGridContainer(context, index, ref),
-                      ),
-                    ),
-                  );
-                },
-              ));
+    return FutureBuilder(
+      future: ref.watch(pendingProductProvider).loadList(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return customErrorWidget();
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return customLoaderWidget();
+        } else {
+          return AnimatedGrid(
+            initialItemCount:
+                ref.watch(pendingProductProvider).pendingProduct.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: 0.9, crossAxisCount: 2),
+            itemBuilder: (context, index, animation) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Card(
+                  elevation: 10,
+                  child: InkWell(
+                    onTap: () {},
+                    child: _createGridContainer(context, index, ref),
+                  ),
+                ),
+              );
+            },
+          );
+        }
+      },
+    );
   }
 
   _createGridContainer(BuildContext context, int index, WidgetRef ref) {
@@ -102,9 +111,6 @@ class _GridViewWidgetState extends ConsumerState<GridViewWidget> {
                 IconButton(
                     onPressed: () async {
                       if (mounted) {
-                        await ref
-                            .watch(pendingProductProvider)
-                            .deleteProduct(product);
                         // ignore: use_build_context_synchronously
                         AnimatedGrid.of(context).removeItem(
                           duration: const Duration(milliseconds: 600),
@@ -115,11 +121,14 @@ class _GridViewWidgetState extends ConsumerState<GridViewWidget> {
                                 child: Card(
                                   color: errorColor,
                                   child: const ListTile(
-                                    title: Center(child: Text('Cancelado')),
+                                    title: Center(child: Text('Rechazado')),
                                   ),
                                 ));
                           },
                         );
+                        await ref
+                            .watch(pendingProductProvider)
+                            .deleteProduct(product);
 
                         CheckedProduct checkedProduct = CheckedProduct(
                             name: product.name,
@@ -153,7 +162,9 @@ class _GridViewWidgetState extends ConsumerState<GridViewWidget> {
                                 ));
                           },
                         );
-
+                        await ref
+                            .watch(pendingProductProvider)
+                            .deleteProduct(product);
                         CheckedProduct checkedProduct = CheckedProduct(
                             name: product.name,
                             description: product.description,

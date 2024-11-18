@@ -4,18 +4,17 @@ import 'dart:convert';
 class Product {
   String name;
   String description;
-  int id;
+  int? id;
   Product({
     required this.name,
     required this.description,
-    required this.id,
+    this.id,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'name': name,
       'description': description,
-      'id': id,
     };
   }
 

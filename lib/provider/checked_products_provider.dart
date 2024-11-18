@@ -32,12 +32,11 @@ class ProductsProvider extends ChangeNotifier {
 
   addProduct(CheckedProduct checkedProduct) async {
     await _checkedProductsSqlite.addProduct(checkedProduct);
-    _checkedProduct.add(checkedProduct);
     notifyListeners();
   }
 
   deleteProduct(CheckedProduct checkedProduct) async {
-    await _checkedProductsSqlite.deleteProduct(checkedProduct.id);
+    await _checkedProductsSqlite.deleteProduct(checkedProduct.id!);
     _checkedProduct.removeWhere((element) => element.id == checkedProduct.id,);
     notifyListeners();
   }

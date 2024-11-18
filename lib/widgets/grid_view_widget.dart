@@ -124,7 +124,6 @@ class _GridViewWidgetState extends ConsumerState<GridViewWidget> {
                         CheckedProduct checkedProduct = CheckedProduct(
                             name: product.name,
                             description: product.description,
-                            id: product.id,
                             state: Status.canceled);
                         ref
                             .watch(checkedProductProvider)
@@ -158,7 +157,6 @@ class _GridViewWidgetState extends ConsumerState<GridViewWidget> {
                         CheckedProduct checkedProduct = CheckedProduct(
                             name: product.name,
                             description: product.description,
-                            id: product.id,
                             state: Status.accepted);
                         ref
                             .watch(checkedProductProvider)

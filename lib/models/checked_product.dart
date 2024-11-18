@@ -7,7 +7,7 @@ class CheckedProduct extends Product {
   CheckedProduct({
     required super.name,
     required super.description,
-    required super.id,
+    super.id,
     required this.state,
   });
 
